@@ -320,7 +320,7 @@ export default function App() {
           <div>
             <h1 className="text-3xl font-light tracking-tight text-white">
               ELEVATOR <span className="font-bold text-blue-400">ENGINEER-CALC</span>
-              <span className="text-xs align-top opacity-50 px-2 font-mono">V2.0</span>
+              <span className="text-xs align-top opacity-50 px-2 font-mono">V2.0-Powered by Giti Nicestep CO.,LTD.</span>
             </h1>
           </div>
           <div className="text-right hidden sm:block">
