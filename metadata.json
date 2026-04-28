@@ -1,0 +1,6 @@
+{
+  "name": "Elevator Engineer Calculator",
+  "description": "專業電梯工程師計算機，包含速度、馬達轉速、容量、電功率等相關公式計算",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
