@@ -54,7 +54,7 @@ function SpeedCalculator() {
     <div className="glass-card p-5">
       <div className="flex items-center gap-2 mb-4">
         <div className="w-2 h-4 bg-blue-500 rounded-[1px]"></div>
-        <h3 className="text-sm font-semibold tracking-wide text-white">1. 電梯速度 (Elevator Speed)</h3>
+        <h3 className="text-sm font-semibold tracking-wide text-white">1. 電梯速度 (M/min)</h3>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <InputField label="額定轉速 (RPM)" type="number" value={rpm} onChange={e => setRpm(e.target.value)} />
@@ -97,7 +97,7 @@ function PMMotorSyncSpeed() {
     <div className="glass-card p-5">
       <div className="flex items-center gap-2 mb-4">
         <div className="w-2 h-4 bg-indigo-500 rounded-[1px]"></div>
-        <h3 className="text-sm font-semibold tracking-wide text-white">2. PM馬達同步轉速</h3>
+        <h3 className="text-sm font-semibold tracking-wide text-white">2. PM馬達同步轉速 (RPM)</h3>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <InputField label="頻率 Hz" type="number" value={hz} onChange={e => setHz(e.target.value)} />
@@ -120,7 +120,7 @@ function IMMotorRatedSpeed() {
     <div className="glass-card p-5">
       <div className="flex items-center gap-2 mb-4">
         <div className="w-2 h-4 bg-purple-500 rounded-[1px]"></div>
-        <h3 className="text-sm font-semibold tracking-wide text-white">3. IM馬達額定轉速</h3>
+        <h3 className="text-sm font-semibold tracking-wide text-white">3. IM馬達額定轉速 (RPM)</h3>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <InputField label="頻率 Hz" type="number" value={hz} onChange={e => setHz(e.target.value)} />
@@ -189,6 +189,48 @@ function ActualMotorCapacity() {
   );
 }
 
+function BrakingResistor() {
+  const [dischargeVoltage, setDischargeVoltage] = useState<number>(360);
+  const [motorKw, setMotorKw] = useState<string>('');
+  const [gearEfficiency, setGearEfficiency] = useState<number>(1.0);
+
+  const kwNum = Number(motorKw);
+  const resistance = kwNum > 0 ? ((dischargeVoltage * dischargeVoltage) / (kwNum * 1000 * gearEfficiency * 1.25)).toFixed(2) : 0;
+
+  return (
+    <div className="glass-card p-5">
+      <div className="flex items-center gap-2 mb-4">
+        <div className="w-2 h-4 bg-cyan-400 rounded-[1px]"></div>
+        <h3 className="text-sm font-semibold tracking-wide text-white">5. 制動電阻估算 (R)</h3>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <SelectField 
+          label="放電電壓 (V)" 
+          value={dischargeVoltage} 
+          onChange={e => setDischargeVoltage(Number(e.target.value))}
+          options={[
+            {label: '220V系統', value: 360},
+            {label: '380V系統', value: 690},
+          ]}
+        />
+        <InputField label="馬達功率 (KW)" type="number" value={motorKw} onChange={e => setMotorKw(e.target.value)} />
+        <SelectField 
+          className="sm:col-span-2"
+          label="齒輪效率" 
+          value={gearEfficiency} 
+          onChange={e => setGearEfficiency(Number(e.target.value))}
+          options={[
+            {label: 'PM主機', value: 1.0},
+            {label: 'IM主機', value: 0.7},
+            {label: 'IM斜齒輪主機', value: 0.85},
+          ]}
+        />
+      </div>
+      <ResultBox label="制動電阻" value={resistance} unit="Ω" />
+    </div>
+  );
+}
+
 function RopeTravel() {
   const [floors, setFloors] = useState<string>('');
   const [height, setHeight] = useState<string>('');
@@ -200,7 +242,7 @@ function RopeTravel() {
     <div className="glass-card p-5">
       <div className="flex items-center gap-2 mb-4">
         <div className="w-2 h-4 bg-orange-400 rounded-[1px]"></div>
-        <h3 className="text-sm font-semibold tracking-wide text-white">5. 鋼索行程估算 (CM)</h3>
+        <h3 className="text-sm font-semibold tracking-wide text-white">6. 鋼索行程估算 (CM)</h3>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <InputField label="樓停數" type="number" value={floors} onChange={e => setFloors(e.target.value)} />
@@ -223,7 +265,7 @@ function DCPower() {
     <div className="glass-card p-5">
       <div className="flex items-center gap-2 mb-4">
         <div className="w-2 h-4 bg-yellow-400 rounded-[1px]"></div>
-        <h3 className="text-sm font-semibold tracking-wide text-white">6. 直流電功率 (W)</h3>
+        <h3 className="text-sm font-semibold tracking-wide text-white">7. 直流電功率 (W)</h3>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <InputField label="電壓 V" type="number" value={voltage} onChange={e => setVoltage(e.target.value)} />
@@ -245,7 +287,7 @@ function AC3PhasePower() {
     <div className="glass-card p-5">
       <div className="flex items-center gap-2 mb-4">
         <div className="w-2 h-4 bg-red-400 rounded-[1px]"></div>
-        <h3 className="text-sm font-semibold tracking-wide text-white">7. 三相交流電機功率 (W)</h3>
+        <h3 className="text-sm font-semibold tracking-wide text-white">8. 三相交流電機功率 (W)</h3>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <InputField label="電壓 V" type="number" value={voltage} onChange={e => setVoltage(e.target.value)} />
@@ -301,7 +343,7 @@ function OhmsLaw() {
     <div className="glass-card p-5">
       <div className="flex items-center gap-2 mb-4">
         <div className="w-2 h-4 bg-yellow-500 rounded-[1px]"></div>
-        <h3 className="text-sm font-semibold tracking-wide text-white">8. 歐姆定理</h3>
+        <h3 className="text-sm font-semibold tracking-wide text-white">9. 歐姆定理 (V=I*R)</h3>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <InputField label="電壓 V" type="number" value={voltage} onChange={e => handleInput('V', e.target.value)} />
@@ -334,6 +376,7 @@ export default function App() {
           <IMMotorRatedSpeed />
           <SuggestedMotorCapacity />
           {/* <ActualMotorCapacity /> */}
+          <BrakingResistor />
           <RopeTravel />
           <DCPower />
           <AC3PhasePower />
